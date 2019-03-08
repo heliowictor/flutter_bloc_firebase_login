@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "743557796059-euf4d2rckpjvnlmvi9pq6eh3kv7u52b6.apps.googleusercontent.com",
+          "client_id": "743557796059-6a52ju4p0q30sjivenkse3o3vprobulj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "br.com.thyagoluciano.bloc_firebase_login",
-            "certificate_hash": "7312b3606b97ccc6088c969514ae882fe69a8891"
+            "certificate_hash": "0e2bef63ce5b8c75970654b0896a319a21d6c5e1"
           }
         },
         {
@@ -42,6 +42,13 @@
             {
               "client_id": "743557796059-r04m9nfg5r9jblanif8gghv7r3kpa7q9.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "743557796059-7l1ta52r2is8tcafob15fs2b21ei11us.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.thyagoluciano.blocFirebaseLogin"
+              }
             }
           ]
         },
