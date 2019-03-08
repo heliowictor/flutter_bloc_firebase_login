@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_firebase_login/bloc/login/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:bloc_firebase_login/models/user_model.dart';
+import 'package:bloc_firebase_login/repository/user_repository.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
@@ -12,24 +12,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginState currentState, 
     LoginEvent event
   ) async* {
-    FirebaseUser user;
-
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    UserRepository _userRepository = UserRepository();
     
     switch (event) {
       case LoginEvent.loginWithGoogle:
         try {
-          final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-          final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-          final AuthCredential credential =GoogleAuthProvider.getCredential(
-            accessToken: googleAuth.accessToken,
-            idToken: googleAuth.idToken
+          final UserModel user = await _userRepository.authenticateWithCredentials(
+            credentialType: CredentialType.GOOGLE
           );
-
-          user = await _auth.signInWithCredential(credential);
-          yield LoginState.success(user.uid);
+          yield LoginState.success(user.token);
         } catch (error) {
           print(error);
           yield LoginState.failure(error);
