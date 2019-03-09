@@ -1,16 +1,21 @@
-import 'package:bloc_firebase_login/bloc/login/login.dart';
+import 'package:bloc_firebase_login/bloc/authentication/authentication.dart';
+import 'package:bloc_firebase_login/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatelessWidget {
+
+  final UserRepository userRepository;
+
+  LoginPage({this.userRepository});
+
   @override
   Widget build(BuildContext context) {
-    final LoginBloc _loginBloc = BlocProvider.of<LoginBloc>(context);
-
+    final AuthenticationBloc _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
-      body: BlocBuilder<LoginEvent, LoginState>(
-        bloc: _loginBloc,
-        builder: (BuildContext context, LoginState loginState) {
+      body: BlocBuilder<AuthenticationEvent, AuthenticationState>(
+        bloc: _authenticationBloc,
+        builder: (BuildContext context, AuthenticationState authenticationState) {
           return Container(
             child: Center(
               child: Column(
@@ -18,7 +23,7 @@ class LoginPage extends StatelessWidget {
                 children: <Widget>[
                   RaisedButton(
                     onPressed: () {
-                      _loginBloc.dispatch(LoginEvent.loginWithGoogle);
+                      _authenticationBloc.dispatch(LoggedIn(authenticationType: AuthenticationType.GOOGLE));
                     },
                     color: Colors.white,
                     child: Container(
@@ -39,10 +44,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Text("Usuario Logado: ${loginState.token}"),
-                  ),
+                  
                 ],
               ),
             ),

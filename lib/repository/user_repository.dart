@@ -3,15 +3,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-enum CredentialType {
-  GOOGLE,
-  FACEBOOK
-}
+enum AuthenticationType { GOOGLE, FACEBOOK }
 
 class UserRepository {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser user;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<UserModel> currentUser() async {
+    FirebaseUser user = await _auth.currentUser();
+    if (user != null) {
+      return UserModel(
+        token: user.uid,
+        userName: user.displayName
+      );
+    }
+
+    return null;
+  }
 
   Future<String> authenticate({
     @required String username,
@@ -22,24 +30,25 @@ class UserRepository {
   }
 
   Future<UserModel> authenticateWithCredentials({
-    @required CredentialType credentialType
+    @required AuthenticationType authenticationType
   }) async {
     AuthCredential credential;
-    user = await _auth.currentUser();
+    UserModel userModel = await currentUser();
+    FirebaseUser firebaseUser;
 
-    if (credentialType == CredentialType.GOOGLE) {
-      if (user == null) {
+    if (authenticationType == AuthenticationType.GOOGLE) {
+      if (userModel == null) {
         credential = await authenticatedWithGoogle();
       }
     } 
 
-    if(user == null) {
-      user = await _auth.signInWithCredential(credential);
+    if(userModel == null) {
+      firebaseUser = await _auth.signInWithCredential(credential);
     }
 
     return UserModel(
-      token: user.uid,
-      userName: ''
+      token: firebaseUser.uid,
+      userName: firebaseUser.displayName
     );
   }
 
@@ -63,5 +72,9 @@ class UserRepository {
       print('Error: $error)');
       throw error;
     }
+  }
+
+  Future<void> signOut() {
+    return _auth.signOut();
   }
 }

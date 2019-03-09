@@ -16,7 +16,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
       case ThemeEvent.toggle:
         yield currentState == ThemeData.dark()
         ? ThemeData.light()
-        :ThemeData.dark();
+        : ThemeData.dark();
         break;
     }
   }
